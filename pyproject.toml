@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "cfo-ai"
+version = "0.1.0"
+description = ""
+authors = ["A Team Hackathon"]
+readme = "README.md"
+packages = [{include = "cfo_ai"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.91.0"
+uvicorn = "^0.20.0"
+gunicorn = "^20.0.4"
+black = "^23.1.0"
+flake8 = "^6.0.0"
+isort = "^5.12.0"
+mypy = "^1.0.0"
+langchain = "^0.0.142"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
