@@ -30,6 +30,12 @@ for example, to run a script:
 poetry run python3 cfo_ai/scripts/test_script.py
 ```
 
+To run streamlit app locally:
+
+```shell
+poetry run streamlit run cfo_ai/streamlit/local_app.py
+```
+
 To run the tests:
 
 ```

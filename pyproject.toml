@@ -16,6 +16,8 @@ flake8 = "^6.0.0"
 isort = "^5.12.0"
 mypy = "^1.0.0"
 langchain = "^0.0.142"
+streamlit = "^1.22.0"
+python-dotenv = "^1.0.0"
 
 
 [build-system]
