@@ -27,3 +27,14 @@ class ChatbotUtils:
             )
         st.session_state["ready"] = True
         return chatbot
+
+    # @staticmethod
+    # def setup_chatbot_without_file(model, temperature):
+    #     """
+    #     Sets up the chatbot with the uploaded file, model, and temperature
+    #     """
+    #         chatbot = Chatbot(
+    #             model, temperature, use_retrieval=use_retrieval, vectors=vectors
+    #         )
+    #     st.session_state["ready"] = True
+    #     return chatbot

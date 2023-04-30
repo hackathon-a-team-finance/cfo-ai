@@ -9,16 +9,27 @@ class ChatHistory:
     Chat history
     """
 
-    def __init__(self, topic):
+    def __init__(self, topic, mode):
         self.history = st.session_state.get("history", [])
         self.topic = topic
+        self.mode = mode
         st.session_state["history"] = self.history
 
     def default_greeting(self):
         return "Hello!"
 
     def default_prompt(self):
-        return f"Hi there, my name is mAI CFO. Ask me about anything related to {self.topic}!"
+        qa_doc_prompt = f"Hi there, welcome to mAI CFO. Ask me about anything related to {self.topic}!"
+        general_prompt = """
+        Hi there, welcome to mAI CFO! Ask me about anything related to your finances, including but not limited to: 
+        - Your financial transactions and history 
+        - Company financial documents 
+        - P&L statements 
+        """
+        if self.mode == "General Q&A":
+            return general_prompt
+        else:
+            return qa_doc_prompt
 
     def initialize_user_history(self):
         st.session_state["user"] = [self.default_greeting()]

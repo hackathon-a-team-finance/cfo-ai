@@ -22,6 +22,12 @@ class Sidebar:
             about.write(section)
 
     @staticmethod
+    def integrate_bank_account_data():
+        if st.button("Integrate Bank Account data"):
+            st.session_state["integrate_bank_data"] = True
+        st.session_state.setdefault("integrate_bank_data", False)
+
+    @staticmethod
     def reset_chat_button():
         if st.button("Reset chat"):
             st.session_state["reset_chat"] = True
@@ -42,9 +48,10 @@ class Sidebar:
         st.session_state["temperature"] = temperature
 
     def show_options(self):
-        with st.sidebar.expander("Tools", expanded=False):
+        with st.sidebar.expander("Tools and Integrations", expanded=False):
             self.reset_chat_button()
-            self.model_selector()
-            self.temperature_slider()
+            self.integrate_bank_account_data()
+            # self.model_selector()
+            # self.temperature_slider()
             st.session_state.setdefault("model", self.MODEL_OPTIONS[0])
             st.session_state.setdefault("temperature", self.TEMPERATURE_DEFAULT_VALUE)
