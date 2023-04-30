@@ -24,11 +24,11 @@ class ChatbotUtils:
                 type="password",
             )
             if user_api_key:
-                st.sidebar.success("API key loaded", icon="🚀")
+                st.sidebar.success("API key l   oaded", icon="🚀")
         return user_api_key
 
     @staticmethod
-    def setup_chatbot(uploaded_file, model, temperature, use_retrieval):
+    def setup_chatbot(uploaded_file, file_type, model, temperature, use_retrieval):
         """
         Sets up the chatbot with the uploaded file, model, and temperature
         """
@@ -36,9 +36,9 @@ class ChatbotUtils:
         with st.spinner("Processing..."):
             uploaded_file.seek(0)
             file = uploaded_file.read()
-            vectors = []  # embeddings.getDocEmbeds(file, uploaded_file.name)
+            vectors = embeddings.getDocEmbeds(file, uploaded_file.name, file_type)
             chatbot = Chatbot(
-                model, temperature, use_retrieval=use_retrieval, vectors=None
+                model, temperature, use_retrieval=use_retrieval, vectors=vectors
             )
         st.session_state["ready"] = True
         return chatbot

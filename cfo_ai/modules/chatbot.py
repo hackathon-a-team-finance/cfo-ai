@@ -48,7 +48,7 @@ class Chatbot:
                 ),
                 condense_question_prompt=self.CONDENSE_QUESTION_PROMPT,
                 qa_prompt=self.QA_PROMPT,
-                retriever=BaseRetriever(),  # self.vectors.as_retriever() if self.vectors else None,
+                retriever=self.vectors.as_retriever(),
             )
             result = chain(
                 {"question": query, "chat_history": st.session_state["history"]}
@@ -65,5 +65,4 @@ class Chatbot:
             st.session_state["history"].append((query, result["response"]))
             answer = result["response"]
 
-        print("In conversational_chat(), this is result: ", result)
         return answer

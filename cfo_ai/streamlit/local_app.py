@@ -50,16 +50,41 @@ def show_header(self):
     )
 
 
+def chat(chat_history, uploaded_file, mode):
+    """Chat and generate messages"""
+    if st.session_state["ready"]:
+        response_container, prompt_container = (
+            st.container(),
+            st.container(),
+        )
+
+        with prompt_container:
+            is_ready, user_input = prompt_form()
+            chat_history.initialize(uploaded_file)
+            if st.session_state["reset_chat"]:
+                chat_history.reset(uploaded_file)
+            if is_ready:
+                chat_history.append("user", user_input)
+                if mode == "Q&A with CSV":
+                    output = st.session_state["csv_agent"].run(user_input)
+                elif mode == "Q&A with PDF":
+                    output = st.session_state["chatbot"].conversational_chat(user_input)
+                else:
+                    output = "Invalid mode"
+                chat_history.append("assistant", output)
+        chat_history.generate_messages(response_container)
+    return
+
+
 def main():
     """Main function"""
     init()
     load_dotenv()
     st.set_page_config(page_title="mAI CFO", page_icon=":book:")
 
-    mode_options = ["Q&A with CSV", "Other"]
+    mode_options = ["Q&A with CSV", "Q&A with PDF", "Other"]
 
     sidebar = Sidebar()
-    doc_utils = DocUtils()
 
     mode = st.sidebar.selectbox(
         "Select an option",
@@ -74,6 +99,7 @@ def main():
     temperature = st.session_state["temperature"]
 
     if mode == "Q&A with CSV":
+        doc_utils = DocUtils()
         sidebar.show_options()
         uploaded_file = doc_utils.handle_upload()
 
@@ -86,41 +112,38 @@ def main():
                 verbose=True,
                 max_iterations=4,
             )
+            st.session_state["csv_agent"] = csv_agent
 
             try:
-                chatbot = ChatbotUtils.setup_chatbot(
-                    uploaded_file_content, model, temperature, use_retrieval=False
+                chat(
+                    chat_history,
+                    uploaded_file,
+                    mode,
                 )
-                st.session_state["chatbot"] = chatbot
+            except Exception as e:
+                st.error("Error: {}".format(e))
+    elif mode == "Q&A with PDF":
+        doc_utils = DocUtils(file_type="pdf")
+        sidebar.show_options()
+        uploaded_file = doc_utils.handle_upload()
 
-                if st.session_state["ready"]:
-                    response_container, prompt_container = (
-                        st.container(),
-                        st.container(),
-                    )
+        if uploaded_file:
+            chat_history = ChatHistory(topic="mortgages")
+            chatbot = ChatbotUtils.setup_chatbot(
+                uploaded_file=uploaded_file,
+                file_type="pdf",
+                model=model,
+                temperature=temperature,
+                use_retrieval=True,
+            )
+            st.session_state["chatbot"] = chatbot
 
-                    with prompt_container:
-                        is_ready, user_input = prompt_form()
-
-                        chat_history.initialize(uploaded_file)
-                        if st.session_state["reset_chat"]:
-                            chat_history.reset(uploaded_file)
-
-                        if is_ready:
-                            chat_history.append("user", user_input)
-
-                            if mode == "Q&A with CSV":
-                                output = csv_agent.run(user_input)
-                            elif mode == "Regular Q&A":
-                                output = st.session_state[
-                                    "chatbot"
-                                ].conversational_chat(user_input)
-                            else:
-                                output = "Invalid mode"
-                            chat_history.append("assistant", output)
-
-                    chat_history.generate_messages(response_container)
-
+            try:
+                chat(
+                    chat_history,
+                    uploaded_file,
+                    mode,
+                )
             except Exception as e:
                 st.error("Error: {}".format(e))
     elif mode == "Other":

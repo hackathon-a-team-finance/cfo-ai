@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 import streamlit as st
+from pypdf import PdfReader
 
 
 class DocUtils:
@@ -9,10 +10,14 @@ class DocUtils:
         self.file_type = file_type
 
     def show_user_file(self, uploaded_file):
-        file_container = st.expander("Your CSV file :")
-        shows = pd.read_csv(uploaded_file)
-        uploaded_file.seek(0)
-        file_container.write(shows)
+        file_container = st.expander("Your file :")
+        if self.file_type == "csv":
+            shows = pd.read_csv(uploaded_file)
+            uploaded_file.seek(0)
+            file_container.write(shows)
+        elif self.file_type == "pdf":
+            uploaded_file.seek(0)
+            file = uploaded_file.read()
         return
 
     def handle_upload(self):

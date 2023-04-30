@@ -135,3 +135,6 @@ dmypy.json
 *.xlsx
 *.doc 
 *.docx
+
+# embeddings
+*.pkl

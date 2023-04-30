@@ -20,6 +20,9 @@ streamlit = "^1.22.0"
 python-dotenv = "^1.0.0"
 streamlit-chat = "^0.0.2.2"
 pandas = "^2.0.1"
+pypdf = "^3.8.1"
+tiktoken = "^0.3.3"
+faiss-cpu = "^1.7.4"
 
 
 [build-system]
