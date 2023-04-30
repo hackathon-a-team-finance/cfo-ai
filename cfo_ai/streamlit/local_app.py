@@ -190,7 +190,7 @@ def main():
     elif mode == "Document Analysis":
         doc_utils = DocUtils(file_type="pdf")
         sidebar.show_options()
-        uploaded_file = doc_utils.handle_upload(file_type="pdf", mode="Document Analysis")
+        uploaded_file = doc_utils.handle_upload(file_type="pdf")
 
         if uploaded_file:
             chat_history = ChatHistory(topic="mortgages", mode="Document Analysis")
