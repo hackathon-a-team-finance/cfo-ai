@@ -17,10 +17,6 @@ from cfo_ai.modules.embeddings import Embeddings
 from cfo_ai.modules.sidebar import Sidebar
 
 
-def init():
-    print("Running init()..")
-
-
 def prompt_form():
     """
     Displays the prompt form
@@ -38,7 +34,7 @@ def prompt_form():
     return is_ready, user_input
 
 
-def show_header(self):
+def show_header():
     """
     Displays the header of the app
     """
@@ -51,7 +47,9 @@ def show_header(self):
 
 
 def chat(chat_history, uploaded_file, mode):
-    """Chat and generate messages"""
+    """
+    Chat and generate messages
+    """
     if st.session_state["ready"]:
         response_container, prompt_container = (
             st.container(),
@@ -77,10 +75,12 @@ def chat(chat_history, uploaded_file, mode):
 
 
 def main():
-    """Main function"""
-    init()
+    """
+    Main function
+    """
     load_dotenv()
     st.set_page_config(page_title="mAI CFO", page_icon=":book:")
+    show_header()
 
     mode_options = ["Q&A with CSV", "Q&A with PDF", "Other"]
 
@@ -101,7 +101,7 @@ def main():
     if mode == "Q&A with CSV":
         doc_utils = DocUtils()
         sidebar.show_options()
-        uploaded_file = doc_utils.handle_upload()
+        uploaded_file = doc_utils.handle_upload(file_type="csv")
 
         if uploaded_file:
             chat_history = ChatHistory(topic="transactions")
@@ -125,7 +125,7 @@ def main():
     elif mode == "Q&A with PDF":
         doc_utils = DocUtils(file_type="pdf")
         sidebar.show_options()
-        uploaded_file = doc_utils.handle_upload()
+        uploaded_file = doc_utils.handle_upload(file_type="pdf")
 
         if uploaded_file:
             chat_history = ChatHistory(topic="mortgages")

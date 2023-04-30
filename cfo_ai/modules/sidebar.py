@@ -37,15 +37,9 @@ class Sidebar:
         )
         st.session_state["temperature"] = temperature
 
-    def csv_agent_button(self):
-        st.session_state.setdefault("show_csv_agent", False)
-        if st.sidebar.button("CSV Agent"):
-            st.session_state["show_csv_agent"] = not st.session_state["show_csv_agent"]
-
     def show_options(self):
-        with st.sidebar.expander("🛠️ Tools", expanded=False):
+        with st.sidebar.expander("Tools", expanded=False):
             self.reset_chat_button()
-            self.csv_agent_button()
             self.model_selector()
             self.temperature_slider()
             st.session_state.setdefault("model", self.MODEL_OPTIONS[0])
