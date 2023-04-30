@@ -28,9 +28,11 @@ condense_template = """
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_template)
 
 
-csv_qa_template = """
+vector_store_qa_template = """
     You are an AI conversational assistant to answer questions based on a context.
     You are given data from a csv file and a question, you must help the user find the information they need. 
+    Remember that the csv contains financial data so remember to convert the dollar amounts to numbers. 
+    Also remember that expenses are negative numbers and sales / income are positive numbers.
     Your answers should be friendly, in the same language.
 
     question: {question}
@@ -39,6 +41,6 @@ csv_qa_template = """
     =======
     """
 
-CSV_QA_PROMPT = PromptTemplate(
-    template=csv_qa_template, input_variables=["question", "context"]
+VECTOR_STORE_QA_PROMPT = PromptTemplate(
+    template=vector_store_qa_template, input_variables=["question", "context"]
 )

@@ -4,7 +4,8 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts.prompt import PromptTemplate
 from langchain.schema import BaseRetriever
 
-from cfo_ai.prompts.qa_templates import CONDENSE_QUESTION_PROMPT, CSV_QA_PROMPT
+from cfo_ai.prompts.qa_templates import (CONDENSE_QUESTION_PROMPT,
+                                         VECTOR_STORE_QA_PROMPT)
 
 
 class Chatbot:
@@ -25,12 +26,13 @@ class Chatbot:
         chain = None
         answer = None
         if self.use_retrieval:
+            """Uses retrieval aka vector store"""
             chain = ConversationalRetrievalChain.from_llm(
                 llm=ChatOpenAI(
                     model_name=self.model_name, temperature=self.temperature
                 ),
                 condense_question_prompt=CONDENSE_QUESTION_PROMPT,
-                qa_prompt=CSV_QA_PROMPT,
+                qa_prompt=VECTOR_STORE_QA_PROMPT,
                 retriever=self.vectors.as_retriever(),
             )
             result = chain(
@@ -39,6 +41,7 @@ class Chatbot:
             st.session_state["history"].append((query, result["answer"]))
             answer = result["answer"]
         else:
+            """Default without vector store"""
             chain = ConversationChain(
                 llm=ChatOpenAI(
                     model_name=self.model_name, temperature=self.temperature

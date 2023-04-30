@@ -17,14 +17,14 @@ from cfo_ai.modules.embeddings import Embeddings
 from cfo_ai.modules.sidebar import Sidebar
 
 
-def prompt_form():
+def prompt_form(file_type):
     """
     Displays the prompt form
     """
     with st.form(key="my_form", clear_on_submit=True):
         user_input = st.text_area(
             "Query:",
-            placeholder="Ask me anything about the document: ",
+            placeholder="Ask me anything about the {}: ".format(file_type),
             key="input",
             label_visibility="collapsed",
         )
@@ -46,7 +46,7 @@ def show_header():
     )
 
 
-def chat(chat_history, uploaded_file, mode):
+def chat(chat_history, uploaded_file, mode, file_type):
     """
     Chat and generate messages
     """
@@ -57,7 +57,7 @@ def chat(chat_history, uploaded_file, mode):
         )
 
         with prompt_container:
-            is_ready, user_input = prompt_form()
+            is_ready, user_input = prompt_form(file_type)
             chat_history.initialize(uploaded_file)
             if st.session_state["reset_chat"]:
                 chat_history.reset(uploaded_file)
@@ -113,13 +113,10 @@ def main():
                 max_iterations=4,
             )
             st.session_state["csv_agent"] = csv_agent
+            st.session_state["ready"] = True
 
             try:
-                chat(
-                    chat_history,
-                    uploaded_file,
-                    mode,
-                )
+                chat(chat_history, uploaded_file, mode, file_type="csv")
             except Exception as e:
                 st.error("Error: {}".format(e))
     elif mode == "Q&A with PDF":
@@ -139,11 +136,7 @@ def main():
             st.session_state["chatbot"] = chatbot
 
             try:
-                chat(
-                    chat_history,
-                    uploaded_file,
-                    mode,
-                )
+                chat(chat_history, uploaded_file, mode, file_type="pdf")
             except Exception as e:
                 st.error("Error: {}".format(e))
     elif mode == "Other":

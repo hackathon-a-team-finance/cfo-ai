@@ -23,6 +23,7 @@ pandas = "^2.0.1"
 pypdf = "^3.8.1"
 tiktoken = "^0.3.3"
 faiss-cpu = "^1.7.4"
+promptlayer = "^0.1.80"
 
 
 [build-system]
