@@ -5,6 +5,10 @@ from streamlit_chat import message
 
 
 class ChatHistory:
+    """
+    Chat history
+    """
+
     def __init__(self, topic):
         self.history = st.session_state.get("history", [])
         self.topic = topic

@@ -10,16 +10,20 @@ from pypdf import PdfReader
 
 
 class Embeddings:
+    """
+    Embeddings
+    """
+
     def __init__(self):
-        self.PATH = "embeddings"
+        self.path = "embeddings"
         self.createEmbeddingsDir()
 
     def createEmbeddingsDir(self):
         """
         Creates a directory to store the embeddings vectors
         """
-        if not os.path.exists(self.PATH):
-            os.mkdir(self.PATH)
+        if not os.path.exists(self.path):
+            os.mkdir(self.path)
 
     def storeDocEmbeds(self, file, filename, file_type):
         """
@@ -52,7 +56,7 @@ class Embeddings:
         os.remove(tmp_file_path)
 
         # Save the vectors to a pickle file
-        with open(f"{self.PATH}/{filename}.pkl", "wb") as f:
+        with open(f"{self.path}/{filename}.pkl", "wb") as f:
             pickle.dump(vectors, f)
 
     def getDocEmbeds(self, file, filename, file_type):
@@ -60,11 +64,11 @@ class Embeddings:
         Retrieves document embeddings
         """
         # Retrieve if already present
-        if not os.path.isfile(f"{self.PATH}/{filename}.pkl"):
+        if not os.path.isfile(f"{self.path}/{filename}.pkl"):
             # Otherwise store vectors
             self.storeDocEmbeds(file, filename, file_type)
 
         # Load vectors
-        with open(f"{self.PATH}/{filename}.pkl", "rb") as f:
+        with open(f"{self.path}/{filename}.pkl", "rb") as f:
             vectors = pickle.load(f)
         return vectors

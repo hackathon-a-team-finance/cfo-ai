@@ -6,6 +6,10 @@ from pypdf import PdfReader
 
 
 class DocUtils:
+    """
+    Document utils
+    """
+
     def __init__(self, file_type="csv"):
         self.file_type = file_type
 

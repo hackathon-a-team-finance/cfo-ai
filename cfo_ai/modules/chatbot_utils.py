@@ -8,24 +8,9 @@ from cfo_ai.modules.embeddings import Embeddings
 
 
 class ChatbotUtils:
-    @staticmethod
-    def load_api_key():
-        """
-        Loads the OpenAI API key from the .env file or from the user's input
-        and returns it
-        """
-        if os.path.exists(".env") and os.environ.get("OPENAI_API_KEY") is not None:
-            user_api_key = os.environ["OPENAI_API_KEY"]
-            st.sidebar.success("API key loaded from .env", icon="🚀")
-        else:
-            user_api_key = st.sidebar.text_input(
-                label="#### Your OpenAI API key 👇",
-                placeholder="Paste your openAI API key, sk-",
-                type="password",
-            )
-            if user_api_key:
-                st.sidebar.success("API key l   oaded", icon="🚀")
-        return user_api_key
+    """
+    Chatbot utils
+    """
 
     @staticmethod
     def setup_chatbot(uploaded_file, file_type, model, temperature, use_retrieval):
