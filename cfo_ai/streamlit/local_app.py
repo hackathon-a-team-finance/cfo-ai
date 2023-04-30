@@ -81,7 +81,7 @@ def show_header():
 
 def user_query_switch_csv(user_input):
     if "generate a P&L statement" in user_input or "Which month" in user_input:
-        st.session_state["mode"] = "Q&A with CSV"
+        st.session_state["mode"] = "Analysis"
 
         csv_agent = create_csv_agent(
             ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"),
@@ -107,14 +107,19 @@ def chat(chat_history, uploaded_file, mode, file_type):
 
         with prompt_container:
             is_ready, user_input = prompt_form(file_type)
+            print("this is session state mode BEFORE: ", st.session_state["mode"])
+            #user_query_switch_csv(user_input)
+            mode = st.session_state["mode"]
+            print("this is session state mode AFTER: ", st.session_state["mode"])
             chat_history.initialize(uploaded_file)
             if st.session_state["reset_chat"]:
                 chat_history.reset(uploaded_file)
             if is_ready:
                 chat_history.append("user", user_input)
-                if mode == "Q&A with CSV":
+                if mode == "Analysis":
+                    user_input = user_input + " Don't forget to use the structure of Action, Action Input, etc."
                     output = ask(user_input, st.session_state["csv_agent"])
-                elif mode == "Q&A with PDF":
+                elif mode == "Document Analysis":
                     output = st.session_state["chatbot"].conversational_chat(user_input)
                 elif mode == "General Q&A":
                     output = st.session_state["chatbot"].conversational_chat(user_input)
@@ -133,7 +138,7 @@ def main():
     st.set_page_config(page_title="mAI CFO", page_icon=":book:")
     show_header()
 
-    mode_options = ["General Q&A", "Q&A with CSV", "Q&A with PDF", "Data Insights"]
+    mode_options = ["General Q&A", "Analysis", "Document Analysis", "Data Insights"]
 
     sidebar = Sidebar()
 
@@ -155,13 +160,13 @@ def main():
     temperature = st.session_state["temperature"]
 
 
-    if mode == "Q&A with CSV":
+    if mode == "Analysis":
         doc_utils = DocUtils()
         sidebar.show_options()
         uploaded_file = doc_utils.handle_upload(file_type="csv")
 
         if uploaded_file:
-            chat_history = ChatHistory(topic="transactions", mode="Q&A with CSV")
+            chat_history = ChatHistory(topic="transactions", mode="Analysis")
             uploaded_file_content = BytesIO(uploaded_file.getvalue())
             
             llm = PromptLayerChatOpenAI(temperature=0,model_name='gpt-4')
@@ -182,13 +187,13 @@ def main():
                 chat(chat_history, uploaded_file, mode, file_type="csv")
             except Exception as e:
                 st.error("Error: {}".format(e))
-    elif mode == "Q&A with PDF":
+    elif mode == "Document Analysis":
         doc_utils = DocUtils(file_type="pdf")
         sidebar.show_options()
-        uploaded_file = doc_utils.handle_upload(file_type="pdf", mode="Q&A with PDF")
+        uploaded_file = doc_utils.handle_upload(file_type="pdf", mode="Document Analysis")
 
         if uploaded_file:
-            chat_history = ChatHistory(topic="mortgages", mode="Q&A with PDF")
+            chat_history = ChatHistory(topic="mortgages", mode="Document Analysis")
             chatbot = ChatbotUtils.setup_chatbot(
                 uploaded_file=uploaded_file,
                 file_type="pdf",

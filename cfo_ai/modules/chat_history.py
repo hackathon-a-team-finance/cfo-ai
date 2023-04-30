@@ -24,7 +24,7 @@ class ChatHistory:
         Hi there, welcome to mAI CFO! Ask me about anything related to your finances, including but not limited to: 
         - Your financial transactions and history 
         - Company financial documents 
-        - P&L statements 
+        - PnL statements 
         """
         if self.mode == "General Q&A":
             return general_prompt
