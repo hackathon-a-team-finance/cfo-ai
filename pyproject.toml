@@ -18,6 +18,8 @@ mypy = "^1.0.0"
 langchain = "^0.0.142"
 streamlit = "^1.22.0"
 python-dotenv = "^1.0.0"
+streamlit-chat = "^0.0.2.2"
+pandas = "^2.0.1"
 
 
 [build-system]
